@@ -1,0 +1,86 @@
+.todayWeather {
+  border-radius: 12px;
+  max-height: 230px;
+  padding: 20px;
+  z-index: 2;
+}
+.container {
+  background: linear-gradient(329.54deg, #5ce7b5 0%, #17d1eb 100%), #ffffff;
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  width: 95%;
+  border-radius: 12px;
+  margin: 10px auto;
+}
+.otherDays {
+  z-index: 2;
+  background-color: #fff;
+  // margin: 10px;
+  height: fit-content;
+  border-radius: 12px;
+}
+.bgitem {
+  z-index: 1;
+  position: absolute;
+  width: 450px;
+  height: 340px;
+  right: 40px;
+  top: 40px;
+  opacity: 0.4;
+  // transform: translate(-100%, 0);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+h2 {
+  font-weight: bold;
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+li {
+  list-style-type: none;
+  margin-left: 20px;
+}
+.wind {
+  margin-right: 5px;
+}
+.temperature {
+  margin-top: 15px;
+}
+.detailLine {
+  height: 140px;
+}
+.alignWeather {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin-top: 15px;
+}
+.dayList {
+  max-height: 70vh;
+  overflow-y: auto;
+  margin-left: 0px;
+  padding-right: 15px;
+  margin-bottom: 20px;
+}
+.daylist::-webkit-scrollbar {
+  width: 2px;
+}
+.daylist::-webkit-scrollbar-track {
+  background: red;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba($color: #000000, $alpha: .2);
+  border-radius: 10px;
+}
