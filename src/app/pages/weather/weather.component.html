@@ -1,61 +1,58 @@
-<div class="container row col-12">
-  <div class="todayWeather col-8 row">
-    <aside class="col-5">
-      <div>
-        <h2>{{mockItem.results.city}}</h2>
-        <h4>{{mockItem.results.date}}</h4>
+<div *ngIf="loading === false" class="container row col-12">
+  <div class="todayWeather col-12  row mx-auto">
+    <aside class="col-12 col-sm-12 col-md-3">
+      <div class="localeInfo">
+        <h2>{{weatherData.city}}</h2>
+        <h4>{{selectedDate.date}}</h4>
       </div>
 
+    </aside>
+    <main class="col-12 col-sm-12 col-md">
+      <div class="row">
+        <i class="{{handdleWeatherCondition(selectedDate.condition)}} fa-2x"></i>
+        <h2>{{selectedDate.description}}</h2>
+      </div>
       <div class="temperature">
         <p>Temperatura:</p>
         <ul>
-          <li><strong> Max: </strong> {{weatherList[0].max}}</li>
-          <li><strong> Min: </strong> {{weatherList[0].min}}</li>
+          <li> <i class="fas mr-1 fa-temperature-high"></i>Max: <strong> {{selectedDate.max}} °C </strong> </li>
+          <li> <i class="fas mr-1 fa-temperature-low"> </i>Min: <strong> {{selectedDate.min}} °C </strong> </li>
         </ul>
-      </div>
-    </aside>
-    <main class="col">
-      <div class="row">
-        <i class="{{handdleWeatherCondition(mockItem.results.condition_slug)}} fa-2x"></i>
-        <h2>{{mockItem.results.description}}</h2>
       </div>
     </main>
+    <div class="searchBox  col-12 col-sm-12 col-md col-lg px-0 row ml-1">
+      <input #input class="col-6 col-sm-6" (keyup)="handdleFilter($event)" placeholder="Filtre os resultados aqui"
+        type="text">
+      <input #inputDate minlength="2" class="col-6 col-sm-6" (keyup)='handdleDateFilter($event)'
+        (change)='handdleDateFilter($event)' type="date" min="{{minDate}}" max="{{maxDate}}">
+      <span (click)="input.value = null; inputDate.value = null;handdleFilter()" class="filterClean">Limpar
+        Filtros</span>
+    </div>
 
   </div>
-  <div *ngIf="handdleImage === 'cloud'" style="background-image: url(../../../assets/cloud.png);" class="bgitem">
-  </div>
-  <div *ngIf="handdleImage === 'rain'" style="background-image: url(../../../assets/rain.svg);" class="bgitem">
-  </div>
-  <div *ngIf="handdleImage === 'sunny'" style="background-image: url(../../../assets/sunny.png);" class="bgitem">
-  </div>
+  <ng-container>
+    <div *ngIf="bgImg === 'cloud'" style="background-image: url(../../../assets/cloud.png);" class="bgitem">
+    </div>
+    <div *ngIf="bgImg === 'rain'" style="background-image: url(../../../assets/rain.svg);" class="bgitem">
+    </div>
+    <div *ngIf="bgImg === 'sunny'" style="background-image: url(../../../assets/sunny.png);" class="bgitem">
+    </div>
+  </ng-container>
   <div class="dayList d-flex justify-content-around row col-12  row">
-    <div *ngFor="let item of weatherList" class="otherDays p-3 col-sm-4 col-md-3 col-lg-2 col-xg-1 m-2">
-      <div class="detailLine">
-
-        <h2 class="text-center">{{item.date}}</h2>
-        <div class="alignWeather">
-          <i class="{{handdleWeatherCondition(item.condition)}} fa-lg align-middle "></i>
-          <h2 class="text-center">
-            {{item.description}}
-          </h2>
-
-        </div>
+    <ng-container *ngFor="let item of weatherList; let i = index">
+      <app-weather-single-day (click)="selectedDate = item" class="px-0  col-12 col-sm-4 col-md-3 col-lg-3 col-xl-2 m-2"
+        *ngIf="i < 7 || showAll === true" [selectedDate]='item === selectedDate' [data]="item"></app-weather-single-day>
+      <div *ngIf="i === 7 && showAll === false" (click)="showAll = true"
+        class="otherDays p-3 col-12 col-sm-4 col-md-3 col-lg-3 col-xl-1 m-2 selected">
+        <h2 class="text-center">
+          Exibir mais...
+        </h2>
       </div>
-      <div class="temperature">
-        <p>Temperatura:</p>
-        <ul>
-          <li><strong> Max: </strong> {{weatherList[0].max}}</li>
-          <li><strong> Min: </strong> {{weatherList[0].min}}</li>
-        </ul>
-      </div>
-      <div class="row col">
-
-        <p class="wind">Vento: </p>
-        <strong>
-          <p>20km/h</p>
-        </strong>
-      </div>
-
+    </ng-container>
+    <div *ngIf="weatherList.length === 0" class="otherDays p-3 col-12 col-sm-4 col-md-3 col-lg-3 col-xl-1 m-2 selected">
+      <h2 class="text-center">
+        Sem dados...
+      </h2>
     </div>
   </div>
 </div>

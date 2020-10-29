@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-weather',
@@ -5,166 +6,96 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./weather.component.scss']
 })
 export class WeatherComponent implements OnInit {
+  bgImg: string;
 
   constructor(
+    private http: HttpClient
   ) { }
 
+  loading = true;
+  selectedDate: Object;
   weatherList: any[]
-  handdleImage: string
-  mockItem = {
-    by: "woeid",
-    valid_key: true,
-    results: {
-      temp: 30,
-      date: "28/10/2020",
-      time: "13:14",
-      condition_code: "32",
-      description: "Ensolarado",
-      currently: "dia",
-      cid: "",
-      city: "Sao Paulo, SP",
-      img_id: "32",
-      humidity: 30,
-      wind_speedy: "22 km/h",
-      sunrise: "5:23 am",
-      sunset: "6:18 pm",
-      condition_slug: "clear_day",
-      city_name: "Sao Paulo",
-      forecast: [
-        {
-          date: "28/10",
-          weekday: "Qua",
-          max: 31,
-          min: 17,
-          description: "Ensolarado",
-          condition: "clear_day"
-        },
-        {
-          date: "29/10",
-          weekday: "Qui",
-          max: 32,
-          min: 17,
-          description: "Parcialmente nublado",
-          condition: "cloudly_day"
-        },
-        {
-          date: "30/10",
-          weekday: "Sex",
-          max: 18,
-          min: 16,
-          description: "Alguns chuviscos",
-          condition: "rain"
-        },
-        {
-          date: "31/10",
-          weekday: "Sáb",
-          max: 16,
-          min: 13,
-          description: "Tempo nublado",
-          condition: "cloud"
-        },
-        {
-          date: "01/11",
-          weekday: "Dom",
-          max: 17,
-          min: 12,
-          description: "Tempo nublado",
-          condition: "cloud"
-        },
-        {
-          date: "02/11",
-          weekday: "Seg",
-          max: 18,
-          min: 12,
-          description: "Parcialmente nublado",
-          condition: "cloudly_day"
-        },
-        {
-          date: "03/11",
-          weekday: "Ter",
-          max: 20,
-          min: 11,
-          description: "Parcialmente nublado",
-          condition: "cloudly_day"
-        },
-        {
-          date: "04/11",
-          weekday: "Qua",
-          max: 23,
-          min: 11,
-          description: "Ensolarado com muitas nuvens",
-          condition: "cloudly_day"
-        },
-        {
-          date: "05/11",
-          weekday: "Qui",
-          max: 25,
-          min: 13,
-          description: "Ensolarado com muitas nuvens",
-          condition: "cloudly_day"
-        },
-        {
-          date: "06/11",
-          weekday: "Sex",
-          max: 28,
-          min: 16,
-          description: "Tempestades isoladas",
-          condition: "storm"
-        }
-      ]
-    },
-    execution_time: 0,
-    from_cache: true
+  weatherData
+  showAll = false;
+  maxDate: string
+  minDate: string
+  handdleFilter(event?: Event) {
+    const filterValue = event ? (event.target as HTMLInputElement).value : '';
+    this.weatherList = this.weatherData.forecast.filter(item => item.description.toLowerCase().includes(filterValue.toLowerCase()))
   }
-
   handdleWeatherCondition(entry) {
-    console.log(entry)
     switch (entry) {
       case 'storm':
+
+        this.bgImg = 'rain'
         return 'fas fa-cloud-showers-heavy';
 
       case 'snow':
+
+        this.bgImg = 'rain'
         return 'fas fa-snowflake';
 
       case 'hail':
+
+        this.bgImg = 'cloud'
         return 'fas fa-cloud-meatball';
 
       case 'rain':
+
+        this.bgImg = 'rain'
         return 'fas fa-cloud-rain';
 
       case 'fog':
+
+        this.bgImg = 'cloud'
         return 'fas fa-smog';
 
       case 'clear_day':
+
+        this.bgImg = 'sunny'
         return 'fas fa-sun';
 
       case 'clear_night':
+
+        this.bgImg = 'sunny'
         return 'fas fa-moon';
 
       case 'cloud':
+
+        this.bgImg = 'cloud'
         return 'fas fa-cloud';
 
       case 'cloudly_day':
+
+        this.bgImg = 'sunny'
         return 'fas fa-cloud-sun';
 
       case 'cloudly_night':
+
+        this.bgImg = 'cloud'
         return 'fas fa-cloud-moon';
     }
+
+  }
+  handdleDateFilter(event) {
+    const filterValue = event ? (event.target as HTMLInputElement).value : '';
+    if (filterValue.length > 5) {
+      let value = filterValue.split('-')[2] + '/' + filterValue.split('-')[1]
+      this.weatherList = this.weatherData.forecast.filter(item => item.date.includes(value))
+    }
+
   }
   ngOnInit(): void {
-    let data = []
-    data = this.mockItem.results.forecast
-    this.weatherList = data
-    console.log(this.mockItem)
-    console.log(this.weatherList)
-    if (this.mockItem.results.condition_slug === 'storm' || 'rain' || 'snow') {
-      this.handdleImage = 'rain'
-    }
-    if (this.mockItem.results.condition_slug === 'clear_day' || 'clear_night ' || 'hail' || 'cloud' || 'fog') {
-      this.handdleImage = 'cloud'
-    }
-    if (this.mockItem.results.condition_slug === 'cloudly_night' || 'cloudly_day') {
-      this.handdleImage = 'sunny'
-    }
+    this.http.get('https://api.hgbrasil.com/weather?format=json-cors&key=6e7e2f15').subscribe(res => {
+      this.weatherData = res['results']
+      this.loading = false
+      this.selectedDate = this.weatherData.forecast[0]
+      this.handdleFilter()
+
+    })
+    const date = new Date()
+    this.minDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate())
+    date.setDate(date.getDate() + 9)
+    this.maxDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate())
   }
 }
