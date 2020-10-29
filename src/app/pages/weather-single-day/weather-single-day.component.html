@@ -1,0 +1,21 @@
+<div [class.selected]='selectedDate'
+  class="otherDays p-3 col-12 col-sm-4 col-md-3 col-lg-3 col-xl-1 ">
+  <div class="detailLine">
+
+    <h2 class="text-center">{{data.date}}</h2>
+    <div class="alignWeather">
+      <i class="{{handdleWeatherCondition(data.condition)}} fa-lg align-middle "></i>
+      <h2 class="text-center">
+        {{data.description}}
+      </h2>
+
+    </div>
+  </div>
+  <div class="temperature">
+    <p>Temperatura:</p>
+    <ul>
+      <li> Max: <strong> {{data.max}} °C </strong></li>
+      <li> Min: <strong> {{data.min}} °C </strong></li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+.otherDays.selected {
+  background-color: #fff;
+}
+.otherDays.selected:hover {
+  background-color: #fff;
+}
+
+.otherDays {
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.6);
+  min-width: 200px;
+  // margin: 10px;
+  height: fit-content;
+  border-radius: 12px;
+  transition: all 300ms ease;
+  cursor: pointer;
+  user-select: none;
+}
+.otherDays:hover {
+  box-shadow: 0px 0px 5px 5px rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.85);
+}
+.detailLine {
+  height: 125px;
+}
+.alignWeather {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin-top: 15px;
+}
+h2 {
+  font-weight: bold;
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+li {
+  list-style-type: none;
+  margin-left: 20px;
+}
+.temperature {
+  margin-top: 15px;
+}
+@media only screen and (max-width: 768px) {
+  main {
+    .row,
+    .temperature {
+      width: fit-content;
+      margin: 0 auto;
+    }
+  }
+}
